@@ -12,7 +12,10 @@ public class Main {
 //		Administrator admin = new Administrator("4","Rade","Radic","1702962710034","VojvodeStepe",EnumPol.MUSKI,"Rade123","RRade"); 
 		Bibliotekar bibliotekar = new Bibliotekar("9","Sonja","Sokic","0109979710035","KolubarskiTrg",EnumPol.ZENSKI,"Sonjica333","SonjaSonic"); 
 //		biblio.upisiFajlAdministartor(admin);
-		biblio.upisiFajlBibliotekar(bibliotekar);
+//		biblio.upisiFajlBibliotekar(bibliotekar);
+		ZanrKnjige zanr = new ZanrKnjige("BLabla","isto blabla","3");
+		Knjiga knjiga = new Knjiga("69","50 nijansi sive","Le 50 nijanos of grayus","Pera Peric",2011,Jezik.ENGLESKI,"Zanimljiva ljubavna prica",zanr);
+		biblio.upisiKnjigu(knjiga);
 	}
 
 }
