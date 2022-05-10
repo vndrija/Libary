@@ -1,35 +1,41 @@
 package Objektno;
-
 import java.time.LocalDate;
 
-public class ClanBiblioteke extends Osoba {
-	private String brClanKarte;
-	private LocalDate datumPoslednjeUplate;
-	private int brojMeseciClanarine;
-	private boolean aktivan;
-	protected TipClanarine tipclanarine;
-	public ClanBiblioteke() {
-		super();
-		this.brClanKarte = "";
-		this.datumPoslednjeUplate = null;
-		this.brojMeseciClanarine = 0;
-		this.aktivan = false;
-		this.tipclanarine = null;
-	}
-	public ClanBiblioteke(String id, String ime, String prezime, String jMBG, String adresa, EnumPol pol) {
+public class ClanBiblioteke extends Osoba{
+	protected String brClankarte;
+    protected LocalDate datumPoslednjeUplate;
+    protected int brojMeseciClanarine;
+    protected boolean aktivan;
+    protected TipClanarine tipClanarine;
+    
+   
+	public ClanBiblioteke(String id, String ime, String prezime, String jMBG, String adresa, EnumPol pol,
+			String brClankarte, LocalDate datumPoslednjeUplate, int brojMeseciClanarine, boolean aktivan,
+			TipClanarine tipClanarine) {
 		super(id, ime, prezime, jMBG, adresa, pol);
-		this.brClanKarte = brClanKarte;
+		this.brClankarte = brClankarte;
 		this.datumPoslednjeUplate = datumPoslednjeUplate;
 		this.brojMeseciClanarine = brojMeseciClanarine;
 		this.aktivan = aktivan;
-		this.tipclanarine = tipclanarine;
+		this.tipClanarine = tipClanarine;
+	}
+	
+	public ClanBiblioteke() {
+		super();
+		this.brClankarte = "";
+		this.datumPoslednjeUplate = null;
+		this.brojMeseciClanarine = 0;
+		this.aktivan = false;
+		this.tipClanarine = null;
 		
 	}
-	public String getBrClanKarte() {
-		return brClanKarte;
+
+
+	public String getBrClankarte() {
+		return brClankarte;
 	}
-	public void setBrClanKarte(String brClanKarte) {
-		this.brClanKarte = brClanKarte;
+	public void setBrClankarte(String brClankarte) {
+		this.brClankarte = brClankarte;
 	}
 	public LocalDate getDatumPoslednjeUplate() {
 		return datumPoslednjeUplate;
@@ -43,24 +49,36 @@ public class ClanBiblioteke extends Osoba {
 	public void setBrojMeseciClanarine(int brojMeseciClanarine) {
 		this.brojMeseciClanarine = brojMeseciClanarine;
 	}
-	public boolean isAktivan() {
+	public boolean getAktivan() {
 		return aktivan;
 	}
 	public void setAktivan(boolean aktivan) {
 		this.aktivan = aktivan;
 	}
-	public TipClanarine getTipclanarine() {
-		return tipclanarine;
+	public TipClanarine getTipClanarine() {
+		return tipClanarine;
 	}
-	public void setTipclanarine(TipClanarine tipclanarine) {
-		this.tipclanarine = tipclanarine;
+	public void setTipClanarine(TipClanarine tipClanarine) {
+		this.tipClanarine = tipClanarine;
 	}
+	
+
+
 	@Override
 	public String toString() {
-		return "ClanBiblioteke [brClanKarte=" + brClanKarte + ", datumPoslednjeUplate=" + datumPoslednjeUplate
-				+ ", brojMeseciClanarine=" + brojMeseciClanarine + ", aktivan=" + aktivan + ", tipclanarine="
-				+ tipclanarine + "]";
+		return id+";"+ime+";"+prezime+";"+JMBG+";"+adresa+";"+pol+";"+brClankarte+";"+datumPoslednjeUplate+";"+ brojMeseciClanarine+";"+aktivan+";"+tipClanarine;
 	}
 	
+
+
 	
+	
+	
+
+    
+    
+    
+	
+
 }
+

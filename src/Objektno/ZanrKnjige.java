@@ -1,17 +1,17 @@
 package Objektno;
 
 public class ZanrKnjige {
-	private String oznaka;
-	private String opis;
+	protected String oznaka;
+	protected String opis;
+
 	public ZanrKnjige(String oznaka, String opis) {
-		super();
 		this.oznaka = oznaka;
 		this.opis = opis;
 	}
+	
 	public ZanrKnjige() {
 		this.oznaka = "";
 		this.opis = "";
-		
 	}
 	public String getOznaka() {
 		return oznaka;
@@ -25,9 +25,12 @@ public class ZanrKnjige {
 	public void setOpis(String opis) {
 		this.opis = opis;
 	}
+
 	@Override
 	public String toString() {
-		return "ZanrKnjige [oznaka=" + oznaka + ", opis=" + opis + "]";
+		return oznaka + ";" + opis;
 	}
 	
+
 }
+

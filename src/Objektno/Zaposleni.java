@@ -1,40 +1,43 @@
 package Objektno;
 
-public abstract class Zaposleni extends Osoba {
-	private String korisnickoime;
-	private String korisinckasifra;
+public abstract class Zaposleni extends Osoba{
+	protected String korisnickoIme;
+    protected String korisnickaSifra;
+    
+
 	public Zaposleni() {
 		super();
-		this.korisnickoime = "";
-		this.korisinckasifra = "";
-		
+		this.korisnickaSifra = "";
+		this.korisnickoIme = "";
 		
 	}
-	public Zaposleni(String id, String ime, String prezime, String jMBG, String adresa, EnumPol pol) {
+	public Zaposleni(String id, String ime, String prezime, String jMBG, String adresa, EnumPol pol,String korisnickaSifra,String korisnickoIme) {
 		super(id, ime, prezime, jMBG, adresa, pol);
-		this.korisnickoime = korisnickoime;
-		this.korisinckasifra = korisinckasifra;
-		
+		this.korisnickaSifra = korisnickaSifra;
+		this.korisnickoIme = korisnickoIme;
+	
 	}
-	public String getKorisnickoime() {
-		return korisnickoime;
+	public String getKorisnickoIme() {
+		return korisnickoIme;
 	}
-	public void setKorisnickoime(String korisnickoime) {
-		this.korisnickoime = korisnickoime;
+	public void setKorisnickoIme(String korisnickoIme) {
+		this.korisnickoIme = korisnickoIme;
 	}
-	public String getKorisinckasifra() {
-		return korisinckasifra;
+	public String getKorisnickaSifra() {
+		return korisnickaSifra;
 	}
-	public void setKorisinckasifra(String korisinckasifra) {
-		this.korisinckasifra = korisinckasifra;
+	public void setKorisnickaSifra(String korisnickaSifra) {
+		this.korisnickaSifra = korisnickaSifra;
 	}
+	
 	@Override
 	public String toString() {
-		return "Zaposleni [korisnickoime=" + korisnickoime + ", korisinckasifra=" + korisinckasifra + "]";
+		return id+ ";" + ime + ";" + prezime + ";" + JMBG + ";" + adresa + ";" + pol+";"+korisnickoIme + ";" + korisnickaSifra ;
 	}
-	
-	
-	
-	
+	public void DodatiNoveClanove() {
+		
+	}
+    
+    
 
 }
