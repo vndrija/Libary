@@ -3,13 +3,12 @@ package Objektno;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Iterator;
+
 
 
 
@@ -339,6 +338,93 @@ public class Biblioteka {
 			writer.newLine();;
 		writer.close();
 	}
+	
+	public ArrayList<PrimerakKnjige> citajPrimerke(String imeFajla) throws IOException{
+        ArrayList<PrimerakKnjige> primerakKnjige = new ArrayList<PrimerakKnjige>();
+        File fajl = new File(imeFajla);
+        BufferedReader citaj = new BufferedReader(new FileReader(fajl));
+        String line = null;
+        while((line = citaj.readLine())!= null) {
+            String [] niz = line.split(";");
+            String id  = niz[0];
+            int brStrana = Integer.parseInt(niz[1]);
+            boolean tipPoveza= Boolean.parseBoolean(niz[2]);
+            int godinaStampanja = Integer.parseInt(niz[3]);
+            boolean jeliIznajmljena = Boolean.parseBoolean(niz[4]);
+            ArrayList<Knjiga> knjiga = citajKnjige("Objektno/knjige.txt");
+            Knjiga knjiga1 = null;
+            for (Knjiga k: knjiga) {
+                if(k.getId().equals(niz[5])) {
+                    knjiga1 = k;
+                }
+            }
+            PrimerakKnjige primerak = new PrimerakKnjige(id,brStrana,tipPoveza,godinaStampanja,jeliIznajmljena,knjiga1);
+            primerakKnjige.add(primerak);    
+        }
+        citaj.close();
+        return primerakKnjige;
+    }
+    public void upisiPrimerak(PrimerakKnjige p) throws IOException{
+        File file = new File("Objektno/primerakKnjige.txt");
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            String primerak = p.getId()+ ";"+ p.getBrStrana()+";"+p.isTipPoveza()+";"+p.getGodinaStampanja()+";"+p.isJeliIznajmljena()+";"+p.getKnjiga();
+            writer.write(primerak);
+            writer.newLine();
+        writer.close();
+    }
+    public ArrayList<IzdavanjeKnjige> citajIzdavanjeKnjige(String imeFajla) throws IOException{
+        ArrayList<IzdavanjeKnjige> izdavanjeknjiga = new ArrayList<IzdavanjeKnjige>();
+        File fajl = new File(imeFajla);
+        BufferedReader citaj = new BufferedReader(new FileReader(fajl));
+        String line = null;
+        while((line = citaj.readLine())!= null) {
+            String [] niz = line.split(",");
+            LocalDate datumIznajmljivanja = LocalDate.parse(niz[0]);
+            LocalDate datumVracanja = LocalDate.parse(niz[1]);
+            ArrayList<ClanBiblioteke> clanovi = citajClanove("Objektno/clanoviBiblioteke.txt");
+            ClanBiblioteke clan1 = null;
+            for (ClanBiblioteke t : clanovi) {
+                if(t.getId().equals(niz[3])) {
+                    clan1 = t;
+                }
+            }
+            ArrayList<Bibliotekar> bibliotekari = citajBibliotekara("Objektno/bibliotekar.txt");
+            Zaposleni zaposleni = null;
+            for (Bibliotekar t : bibliotekari) {
+                if(t.getId().equals(niz[2])) {
+                    zaposleni = t;
+                }
+            }
+            if(zaposleni == null) { 
+                ArrayList<Administrator> administartor = citajAdministratora("Objektno/administrator.txt");
+                for (Administrator t : administartor) {
+                    if(t.getId().equals(niz[2])) {
+                        zaposleni = t;
+                    }
+                }
+            }
+            ArrayList<PrimerakKnjige> primerciKnjige = citajPrimerke("Objketno/primerakKnjige.txt");
+            PrimerakKnjige primerKnjige = null;
+            for (PrimerakKnjige t : primerciKnjige) {
+                if(t.getId().equals(niz[4])) {
+                    primerKnjige = t;
+                }
+            }
+            IzdavanjeKnjige izdavanje = new IzdavanjeKnjige(datumIznajmljivanja,datumVracanja,zaposleni,clan1,primerKnjige);
+            izdavanjeknjiga.add(izdavanje);
+        }
+        citaj.close();
+        return izdavanjeknjiga;
+
+    }
+    public void upisiIzdavanjeKnjige(IzdavanjeKnjige t) throws IOException{
+        File file = new File("Objektno/izdavanjeKnjige.txt");
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+            String izdavanje = t.getDatumIznajmljivanja()+ ";"+ t.getDatumVracanja()+ ";"+t.getZaposleni()+ ";"+ t.getClan()+ ";"+ t.getPrimerak();
+            writer.write(izdavanje);
+            writer.newLine();;
+        writer.close();
+    }
 	
 	
 
