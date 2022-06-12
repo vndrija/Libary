@@ -489,4 +489,81 @@ public class Biblioteka {
 		}
 		return neobrisani;
 	}
+	public void citajBibliotekara() throws IOException{
+		this.bibliotekar = new ArrayList<Bibliotekar>();
+		File fajl = new File("fajlovi/bibliotekar.txt");
+		BufferedReader citaj = new BufferedReader(new FileReader(fajl));
+		String line = null;
+		while((line = citaj.readLine())!= null) {
+			String [] niz = line.split("\\|");
+			String ime = niz[0];
+			String prezime = niz[1];
+			String jmbg = niz[2];
+			String adresa = niz[3];
+			String id = niz[4];
+			String poll = niz[5];
+			Pol pol = Pol.MUSKO;
+			for(Pol p:Pol.values()) {
+				if(p.name().equalsIgnoreCase(poll)){
+					pol = p;
+				}
+			}
+			String korisnickoIme = niz[6];
+			String lozinka = niz[7];
+			int plata = Integer.parseInt(niz[8]);
+			Boolean obrisan = Boolean.parseBoolean(niz[9]);
+			Bibliotekar bibl = new Bibliotekar(id,ime,prezime,jmbg,adresa,pol,lozinka,korisnickoIme, plata, obrisan);
+			this.bibliotekar.add(bibl);
+			}
+		citaj.close();
+	}
+	public void upisiBibliotekar(Bibliotekar b) throws IOException{
+		File file = new File("fajlovi/bibliotekar.txt");
+		BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
+		String output = b.getId() +"|"+ b.getIme() + "|"+b.getPrezime()+ "|"+b.getJmbg()
+		+"|"+ b.getAdresa()+ "|" +b.getPol() +"|"+b.getLozinka()+"|"+b.getKorisnickoIme() + "|" + b.isObrisan();
+		writer.write(output);
+		writer.newLine();
+		writer.close();
+	}
+	
+	public void obrisiBibliotekara(String id) throws IOException {
+		Bibliotekar bibliotekar = null;
+		for(Bibliotekar b:this.bibliotekar) {
+			if(b.getId().equals(id)) {
+				bibliotekar = b;
+			}
+		}
+		bibliotekar.setObrisan(true);
+	}
+	
+	public void sacuvajBibliotekre() throws IOException{
+        File file=new File("projekatObjektno/bibliotekar.txt");
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        for(Bibliotekar c : this.bibliotekar) {
+            String linija = c.getId() + "|" +c.getIme() + "|" +c.getPrezime() + "|" +
+                    c.getJmbg()+ "|"+ c.getAdresa()+ "|" +c.getPol() + "|" + c.getLozinka() + "|" + c.getKorisnickoIme() + "|" + c.getPlata() + "|" +c.isObrisan();
+            writer.write(linija);
+            writer.newLine();
+        }
+        writer.close();
+    }
+	public ArrayList<Bibliotekar> sviNeobrisaniBibliotekari() {
+		ArrayList<Bibliotekar> neobrisani = new ArrayList<Bibliotekar>();
+		for (Bibliotekar bibliotekari : bibliotekar) {
+			if(!bibliotekari.isObrisan()) {
+				neobrisani.add(bibliotekari);
+			}
+		}
+		return neobrisani;
+	}
+	public Bibliotekar pronadjiBibliotekara(String id) {
+		for (Bibliotekar bibliotekar : this.bibliotekar) {
+			if(bibliotekar.getId().equals(id)) {
+				return bibliotekar;
+			}
+		}
+		return null;
+	}
+	
 }
