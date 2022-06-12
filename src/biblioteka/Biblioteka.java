@@ -566,4 +566,97 @@ public class Biblioteka {
 		return null;
 	}
 	
+	public void citajClanove()throws IOException{
+		ArrayList<Clan> clanovi = new ArrayList<Clan>();
+		File claoviFile = new File("fajlovi/clanbiblioteke.txt");
+		BufferedReader citanje = new BufferedReader(new FileReader(claoviFile));
+		String line1 = null;
+		while((line1 = citanje.readLine())!= null) {
+			String[]nizClanova = line1.split("\\|");
+			String ime = nizClanova[0];
+			String prezime = nizClanova[1];
+			String jmbg = nizClanova[2];
+			String adresa = nizClanova[3];
+			String id = nizClanova[4];
+			String polClana = nizClanova[5];
+			Pol defpol = Pol.MUSKO;
+			for(Pol pol:Pol.values()) {
+				if(pol.name().equalsIgnoreCase(polClana)) {
+					defpol = pol;
+				}
+			}
+			String brClanskeKarte  = nizClanova[6];
+			LocalDate datumUplate = LocalDate.parse(nizClanova[7]);
+			int uplacenoMeseci = Integer.parseInt(nizClanova[8]);
+			boolean aktivan = Boolean.parseBoolean(nizClanova[9]);
+			TipClanarine tipClanarinel = null;
+			for (TipClanarine t : this.tipClanarine) {
+				if(t.getId().equals(nizClanova[10])) {
+					tipClanarinel = t;
+				}
+			}
+			Boolean obrisan = Boolean.parseBoolean(nizClanova[11]);
+			Clan clan = new Clan(ime, prezime, jmbg, adresa, id, defpol, brClanskeKarte, datumUplate, uplacenoMeseci, aktivan, tipClanarinel, obrisan);
+			clanovi.add(clan);
+		}
+		citanje.close();
+	}
+		public void upisiFajlClanBiblioteke(Clan c) throws IOException{
+		File file = new File("fajlovi/clanbiblioteke.txt");
+		BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
+		String output = c.getId() +"|"+ c.getIme() + "|"+c.getPrezime()+ "|"+c.getJmbg() +"|"+ c.getAdresa()+ "|" +c.getPol() +"|"+c.getBrClanskeKarte()+"|"+c.getDatumUplate()+"|"+c.getUplacenoMeseci()+ "|"+c.isAktivan()+"|"+c.getTipClanarine();
+		writer.write(output);
+		writer.newLine();
+		writer.close();
+	}
+		
+		public void obrisiClana(String id) {
+			Clan clan = null;
+			for(Clan c : this.clanBiblioteke) {
+				if (c.getId().equals(id)) {
+					clan = c;
+				}
+			}
+			clan.setObrisan(true);
+		}
+		public void dodajClana(String ime, String prezime, String jmbg, String adresa,
+	    		String id, Pol pol, String brClanskeKarte, LocalDate datumUplate,
+	    		int uplacenoMeseci, boolean aktivan, TipClanarine tipClanarine1, boolean obrisan) throws IOException {
+			this.citajClanove();
+			Clan clan = new Clan(id,ime,prezime,jmbg,adresa,pol,brClanskeKarte,datumUplate,uplacenoMeseci,aktivan, tipClanarine1, obrisan);
+			this.clanBiblioteke.add(clan);
+			this.upisiFajlClanBiblioteke(clan);
+		}
+		
+		public void sacuvajClanove() throws IOException{
+	        File file=new File("projekatObjektno/clanbiblioteke.txt");
+	        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+	        for(Clan c : this.clanBiblioteke) {
+	            String linija = c.getId() + "|" +c.getIme() + "|" +c.getPrezime() + "|" +
+	                    c.getJmbg()+ "|"+ c.getAdresa()+ "|" +c.getPol() + "|" + c.getBrClanskeKarte() + "|" + c.getDatumUplate() + "|" + c.getUplacenoMeseci() + "|" + c.isAktivan() + "|"
+	                    +c.getTipClanarine().getId()+"|"+c.isObrisan();
+	            writer.write(linija);
+	            writer.newLine();
+	        }
+	        writer.close();
+	    }
+		public Clan pronadjiClana(String id) {
+			for (Clan clan : this.clanBiblioteke) {
+				if(clan.getId().equals(id)) {
+					return clan;
+				}
+			}
+			return null;
+		}
+		public ArrayList<Clan> sviNeobrisaniClanoviBiblioteke() {
+			ArrayList<Clan> neobrisani = new ArrayList<Clan>();
+			for (Clan clan : clanBiblioteke) {
+				if(!clan.isObrisan()) {
+					neobrisani.add(clan);
+				}
+			}
+			System.out.println(neobrisani);
+			return neobrisani;
+		}
+		
 }
