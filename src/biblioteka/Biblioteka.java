@@ -659,4 +659,80 @@ public class Biblioteka {
 			return neobrisani;
 		}
 		
+	public void citajIznajmljivanje() throws IOException{
+		File fajl = new File("fajlovi/iznajmljivanjeKnjige.txt");
+		BufferedReader citaj = new BufferedReader(new FileReader(fajl));
+		String line = null;
+		while((line = citaj.readLine())!= null) {
+			String [] niz = line.split("\\|");
+			LocalDate datumIznajmljivanja = LocalDate.parse(niz[0]);
+			LocalDate datumVracanja = LocalDate.parse(niz[1]);
+			
+			this.citajClanove();
+			Clan clan = null;
+			for (Clan t : this.clanBiblioteke) {
+				if(t.getId().equals(niz[3])) {
+					clan = t;
+				}
+			}
+			this.citajBibliotekara();
+			Zaposleni zaposleni = null;
+			for (Bibliotekar t : this.bibliotekar) {
+				if(t.getId().equals(niz[2])) {
+					zaposleni = t;
+				}
+			}
+			if(zaposleni == null) {
+				this.citajAdministratora();
+				for (Administrator t : this.admin) {
+					if(t.getId().equals(niz[3])) {
+						zaposleni = t;
+					}
+				}
+			}
+			this.citajPrimerke();
+			PrimerakKnjige primerak = null;
+			for (PrimerakKnjige t : primerakKnjige) {
+				if(t.getId().equals(niz[4])) {
+					primerak = t;
+				}
+			}
+			Iznajmljivanje iznajmljivanje = new Iznajmljivanje(datumIznajmljivanja,datumVracanja,zaposleni,primerak,clan);
+			this.iznajmljivanjeKnjige.add(iznajmljivanje);//
+		}
+		citaj.close();		
+	}
+	
+	public void upisiIznajmljivanje(Iznajmljivanje t) throws IOException{
+		File file = new File("fajlovi/Iznajmljivanje.txt");
+		BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
+			String sb = t.getDatumIznajmljivanja()+ "|"+ t.getDatumVracanja()+ "|"+t.getZaposleni()+ "|"+ t.getClan()+ "|"+ t.getPrimerak();
+			writer.write(sb);
+			writer.newLine();;
+		writer.close();
+	}
+	
+	public void sacuvajIznajmljivanje() throws IOException{
+        File file=new File("projekatObjektno/iznajmljivanjeKnjige.txt");
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        for(Iznajmljivanje c: this.iznajmljivanjeKnjige) {
+            String linija = c.getDatumIznajmljivanja() + "|" +c.getDatumVracanja() + "|" +c.getZaposleni().getId() + "|" +
+                    c.getClan().getId()+ "|"+c.isObrisan();
+            writer.write(linija);
+            writer.newLine();
+        }
+        writer.close();
+    }
+	public ArrayList<Iznajmljivanje> svaNeobrisanaIzdavanja() {
+		ArrayList<Iznajmljivanje> neobrisani = new ArrayList<Iznajmljivanje>();
+		for (Iznajmljivanje izdavanja : iznajmljivanjeKnjige) {
+			if(!izdavanja.isObrisan()) {
+				neobrisani.add(izdavanja);
+			}
+		}
+		return neobrisani;
+	}
+		
+
 }
+
