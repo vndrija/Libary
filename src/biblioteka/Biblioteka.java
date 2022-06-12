@@ -239,7 +239,89 @@ public class Biblioteka {
 		return null;
 	}
 	
+	public void citajKnjige() throws IOException{
+		this.knjige = new ArrayList<Knjiga>();
+		File fajl = new File("fajlovi/knjige.txt");
+		BufferedReader citaj = new BufferedReader(new FileReader(fajl));
+		String line = null;
+		while((line = citaj.readLine())!= null) {
+			String [] niz = line.split("\\|");
+			String naslov = niz[0];
+			String originalniNaslov = niz[1];
+			String pisac = niz[2];
+			int godinaObjavljivanja = Integer.parseInt(niz[3]);
+			String opisKnjige = niz[4];
+			String id  = niz[5];
+			String jezikOroginala = niz[7];
+			JezikOriginala jezikOriginala = JezikOriginala.Engleski;
+			for (JezikOriginala j: JezikOriginala.values()) {
+				if(j.name().equalsIgnoreCase(jezikOroginala)){
+					jezikOriginala = j;
+				}
+			}
+			this.citajZanr();
+			ZanrKnjige zanr = null;
+			for (ZanrKnjige z : zanrovi) {
+				if(z.getId().equals(niz[6])) {
+					zanr = z;
+				}
+			}
+			Boolean obrisan = Boolean.parseBoolean(niz[8]);
+			Knjiga knjiga = new Knjiga(naslov, originalniNaslov, pisac, godinaObjavljivanja, opisKnjige, id, zanr, jezikOriginala, obrisan);
+			knjige.add(knjiga);
+		}
+		citaj.close();
+	}
+	
+	public void obrisiKnjigu(String id) throws IOException {
+		Knjiga knjiga = null;
+		for (Knjiga k : this.knjige) {
+			if(k.getId().equals(id)) {
+				knjiga = k;
+			}
+		}
+		knjiga.setObrisan(true);
+	}
+	
+	public void sacuvajKnjige() throws IOException{
+        File file=new File("projekatObjektno/knjige.txt");
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        for(Knjiga c : this.knjige) {
+            String linija = c.getId() + "|" +c.getNaslov() + "|" +c.getOriginalniNaslov() + "|" +
+                    c.getPisac()+ "|"+ c.getGodinaObjavljivanja()+ "|" +c.getJezikOriginala() + "|" + c.getOpisKnjige() + "|" + c.getZanr().getId() + "|" +c.isObrisan();
+            writer.write(linija);
+            writer.newLine();
+        }
+        writer.close();
+    }
+	public ArrayList<Knjiga> sveNeobrisaneKnjige() {
+		ArrayList<Knjiga> neobrisani = new ArrayList<Knjiga>();
+		for (Knjiga knjiga : knjige) {
+			if(!knjiga.isObrisan()) {
+				neobrisani.add(knjiga);
+			}
+		}
+		return neobrisani;
+	}
 
-}
+	public void upisiFajl(Knjiga k1) throws IOException{
+		File file = new File("fajlovi/knjige.txt");
+		BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
+		String output = k1.getNaslov() +"|"+ k1.getOriginalniNaslov() + "|"+k1.getPisac()+ "|"+k1.getGodinaObjavljivanja() +"|"+ k1.getOpisKnjige()+ "|" + k1.getId()+"|"+k1.getZanr().getId()+"|"+k1.getJezikOriginala();
+		writer.write(output);
+		writer.newLine();
+		writer.close();
+		
+	}
+	public Knjiga pronadjiKnjigu(String id) {
+		for (Knjiga knjiga : knjige) {
+			if(knjiga.getId().equals(id)) {
+				return knjiga;
+			}
+		}
+		return null;
+	}
+	
 
+	}
 
