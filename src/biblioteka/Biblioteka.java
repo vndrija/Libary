@@ -733,6 +733,84 @@ public class Biblioteka {
 		return neobrisani;
 	}
 		
-
+	public void citajPrimerke() throws IOException{
+		this.primerakKnjige = new ArrayList<PrimerakKnjige>();
+		this.citajKnjige();
+		File fajl = new File("fajlovi/primerakKnjige.txt");
+		BufferedReader citaj = new BufferedReader(new FileReader(fajl));
+		String line = null;
+		while((line = citaj.readLine())!= null) {
+			String [] niz = line.split("\\|");
+			String id  = niz[0];
+			int brStrana = Integer.parseInt(niz[1]);
+			int godinaStampanja = Integer.parseInt(niz[2]);
+			String jezikStampanja = niz[3];
+			boolean izdata = Boolean.parseBoolean(niz[4]);
+			Knjiga knjiga = null;
+			for (Knjiga k: this.knjige) {
+				if(k.getId().equals(niz[5])) {
+					knjiga = k;
+				}
+			}
+			boolean tipPoveza= Boolean.parseBoolean(niz[6]);
+			Boolean obrisan = Boolean.parseBoolean(niz[7]);
+			PrimerakKnjige primerak = new PrimerakKnjige(id, brStrana, godinaStampanja, jezikStampanja, izdata, knjiga, tipPoveza, obrisan);
+			primerakKnjige.add(primerak);	
+		}
+		citaj.close();
+	}
+	public void upisiPrimerakKnjige(PrimerakKnjige p) throws IOException{
+		File file = new File("fajlovi/primerakKnjige.txt");
+		BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
+			String output = p.getId()+ "|"+ p.getBrStrana()+"|"+p.isTipPoveza()+"|"+p.getGodinaStampanja()+"|"+p.isIzdata()+"|"+p.getKnjiga();
+			writer.write(output);
+			writer.newLine();
+		writer.close();
+	}
+	
+	public void brisanjePrimerka(String id) {
+		PrimerakKnjige primerak = null;
+		for(PrimerakKnjige p : this.primerakKnjige) {
+			if(p.getId().equals(id)) {
+				primerak = p;
+			}
+		}
+		primerak.setObrisan(true);
+	}
+	
+	public void dodavanjePrimerka(String id, int brStrana, int godinaStampanja, 
+    		String jezikStampanja, boolean izdata, Knjiga knjiga, boolean tipPoveza, boolean obrisan) throws IOException {
+		PrimerakKnjige primerakJao = new PrimerakKnjige(id, brStrana, godinaStampanja, jezikStampanja, izdata, knjiga, tipPoveza,obrisan);
+		this.primerakKnjige.add(primerakJao);
+		this.upisiPrimerakKnjige(primerakJao);
+	}
+	
+	public void sacuvajPrimerke() throws IOException{
+        File file = new File("fajlovi/primerakKnjige.txt");
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        for(PrimerakKnjige c : this.primerakKnjige) {
+            String linija = c.getId() + "|" +c.getBrStrana() + "|" +c.isTipPoveza() + "|" +
+                    c.getGodinaStampanja()+ "|"+ c.isIzdata()+ "|" +c.getKnjiga().getId() + "|" + c.isObrisan();
+            writer.write(linija);
+            writer.newLine();
+        }
+        writer.close();
+    }
+	public ArrayList<PrimerakKnjige> sviNeobrisaniPrimerciKnjige() {
+		ArrayList<PrimerakKnjige> neobrisani = new ArrayList<PrimerakKnjige>();
+		for (PrimerakKnjige primerak : primerakKnjige) {
+			if(!primerak.isObrisan()) {
+				neobrisani.add(primerak);
+			}
+		}
+		return neobrisani;
+	}
+	public PrimerakKnjige pronadjiPrimerak(String id) {
+		for (PrimerakKnjige primerak : this.primerakKnjige) {
+			if(primerak.getId().equals(id)) {
+				return primerak;
+			}
+		}
+		return null;
+	}
 }
-
