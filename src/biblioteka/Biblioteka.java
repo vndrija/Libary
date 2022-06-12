@@ -402,6 +402,91 @@ public class Biblioteka {
 		return null;
 	}
 	
-
+	public void citajAdministratora() throws IOException{
+		this.admin = new ArrayList<Administrator>();
+		File fajl = new File("fajlovi/administartor.txt");
+		BufferedReader citaj = new BufferedReader(new FileReader(fajl));
+		String line = null;
+		while((line = citaj.readLine())!= null) {
+			String [] niz = line.split("\\|");
+			String ime = niz[0];
+			String prezime = niz[1];
+			String jmbg = niz[2];
+			String adresa = niz[3];
+			String id = niz[4];
+			String pol = niz[5];
+			Pol defpol = Pol.MUSKO;
+			for(Pol p:Pol.values()) {
+				if(p.name().equalsIgnoreCase(pol)){
+					defpol = p;
+				}
+			}
+			String korisnickoIme = niz[6];
+			String lozinka = niz[7];
+			int plata = Integer.parseInt(niz[8]);
+			Boolean obrisan = Boolean.parseBoolean(niz[9]);
+			Administrator admin = new Administrator(ime,prezime,jmbg,adresa,id,defpol,korisnickoIme,lozinka,plata, obrisan	);
+			this.admin.add(admin);
+			}
+		citaj.close();
 	}
-
+	public void upisiFajlAdministartor(ArrayList<Administrator>administartori) throws IOException{
+		File file = new File("fajlovi/administartor.txt");
+		BufferedWriter writer = new BufferedWriter(new FileWriter(file,true));
+		for (Administrator admin: administartori) {
+			String output = admin.getId() +"|"+ admin.getIme() + "|"+admin.getPrezime()+ "|"+admin.getJmbg() +"|"+ admin.getAdresa()+ "|" +admin.getPol()
+			+"|"+admin.getKorisnickoIme()+"|"+admin.getLozinka() + "|" + admin.getPlata() + "|" + admin.isObrisan();
+			writer.write(output);
+			writer.newLine();
+		}
+		writer.close();
+	}
+	
+	public void praviAdministatora(String ime, String prezime, String jmbg, String adresa,
+    		String id, Pol pol, String korisnickoIme, String lozinka, int plata, boolean obrisan) throws IOException {
+		this.citajAdministratora();
+		Administrator administrator = new Administrator(id,ime,prezime,jmbg,adresa, pol,lozinka,korisnickoIme,plata,obrisan);
+		this.admin.add(administrator);
+		this.upisiFajlAdministartor(admin);
+	}
+	
+	public void obrisiAdministratora(String id) throws IOException {
+		Administrator administrator = null;
+		for(Administrator a: this.admin) {
+			if(administrator.getId().equals(id)) {
+				administrator = a;
+			}
+		}
+		administrator.setObrisan(true);
+	}
+	
+	public Administrator pronadjiAdmina(String korisnickoIme) {
+		for(Administrator admin:this.admin) {
+			if(admin.getKorisnickoIme().equals(korisnickoIme)) {
+				return admin;
+			}	
+		}
+		return null;
+	}
+	
+	public void sacuvajAdministatore() throws IOException{
+        File file=new File("projekatObjektno/administrator.txt");
+        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+        for(Administrator c : this.admin) {
+            String linija = c.getId() + "|" +c.getIme() + "|" +c.getPrezime() + "|" +
+                    c.getJmbg()+ "|"+ c.getAdresa()+ "|" +c.getPol() + "|" + c.getLozinka() + "|" + c.getKorisnickoIme() + "|" + c.getPlata() + "|" +c.isObrisan();
+            writer.write(linija);
+            writer.newLine();
+        }
+        writer.close();
+    }
+	public ArrayList<Administrator> sviNeobrisaniAdministatori() {
+		ArrayList<Administrator> neobrisani = new ArrayList<Administrator>();
+		for (Administrator admini : admin) {
+			if(!admini.isObrisan()) {
+				neobrisani.add(admini);
+			}
+		}
+		return neobrisani;
+	}
+}
