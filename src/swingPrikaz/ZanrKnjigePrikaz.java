@@ -1,9 +1,11 @@
 package swingPrikaz;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -16,58 +18,57 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 import biblioteka.Biblioteka;
-import biblioteka.ZanrKnjige;
-import ljudi.Zaposleni;
-//import swingDodavanje.ZanrDodavanje;
-//import swingIzmena.ZanrIzmena;
+import biblioteka.Zanr;
+import swingDodavanje.ZanrDodavanje;
 
-public class ZanrKnjigePrikaz extends JFrame{
+public class ZanrKnjigePrikaz extends JFrame {
 	private JToolBar mainToolbar = new JToolBar();
-	private final JButton btnDodaj = new JButton("Dodaj Zanr");
-	private final JButton btnIzmeni = new JButton("Izmeni Zanr");
-	private final JButton btnIzbrisi = new JButton("Izbrisi Zanr");
-	private Zaposleni zaposleni;
+	private JButton btnAdd = new JButton("Dodaj");
+	private JButton btnEdit = new JButton("Izmeni");
+	private JButton btnDelete = new JButton("Obrisi");
+	
 	ImageIcon ikonica = new ImageIcon("src/slike/knjiga.png");
+	
 	private DefaultTableModel tableModel;
 	private JTable zanroviTabela;
-	
+	 
 	private Biblioteka biblioteka;
-	private ZanrKnjige zanr;
-
-	public ZanrKnjigePrikaz (Biblioteka biblioteka,Zaposleni zaposleni) {
+	
+	public ZanrKnjigePrikaz(Biblioteka biblioteka) {
 		this.biblioteka = biblioteka;
-		this.zaposleni = zaposleni;
-		setTitle("Kompozicije");
-		setSize(600,400);
+		setTitle("Zanrovi");
+		setSize(600, 300);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
-		initGUI();
-		initActions();
-	}
-
-	private void initGUI() {
-		setIconImage(ikonica.getImage());
 		getContentPane().add(mainToolbar, BorderLayout.SOUTH);		
 		mainToolbar.setBackground(Color.LIGHT_GRAY);
-		btnDodaj.setBackground(Color.LIGHT_GRAY);
-		btnIzmeni.setBackground(Color.LIGHT_GRAY);
-		btnIzbrisi.setBackground(Color.LIGHT_GRAY);
-		mainToolbar.add(btnDodaj);
-		mainToolbar.add(btnIzmeni);
-		mainToolbar.add(btnIzbrisi);
-
-		String[] zaglavlja = new String[] {"Id", "Opis", "Oznaka"};
-		Object[][] sadrzaj = new Object[biblioteka.sviNeobrisaniZanrovi().size()][zaglavlja.length];
-		
-		for(int i=0; i<biblioteka.sviNeobrisaniZanrovi().size(); i++) {
-			ZanrKnjige zanr = biblioteka.sviNeobrisaniZanrovi().get(i);
-//			Knjiga knjiga = biblioteka.pronadjiDisk(zanr);
-			sadrzaj[i][0] = zanr.getId();
-			sadrzaj[i][1] = zanr.getOpisZanra();
-			sadrzaj[i][2] = zanr.getOznaka();
-//			sadrzaj[i][2] = disk == null ? "--" : disk.getNaziv();
+		btnAdd.setBackground(Color.LIGHT_GRAY);
+		btnEdit.setBackground(Color.LIGHT_GRAY);
+		btnDelete.setBackground(Color.LIGHT_GRAY);
+		mainToolbar.add(btnAdd);
+		mainToolbar.add(btnEdit);
+		mainToolbar.add(btnDelete);
+		setIconImage(ikonica.getImage());
+		initGUI();
+		initActions();
 		}
+	private void initGUI() {
+		mainToolbar.add(btnAdd);
+		mainToolbar.add(btnEdit);		 
+		mainToolbar.add(btnDelete);		
+		add(mainToolbar, BorderLayout.SOUTH);
 		
+		ArrayList<Zanr>neobrisaniZanrovi=biblioteka.sviNeobrisaniZanrovi();
+		String[] zaglavlja = new String[] {"Id", "Opis", "Oznaka"};
+		Object[][] sadrzaj = new Object[neobrisaniZanrovi.size()][zaglavlja.length];
+		for(int i=0; i<neobrisaniZanrovi.size(); i++) {
+			
+			Zanr zanr = neobrisaniZanrovi.get(i);		
+			sadrzaj[i][0] = zanr.getId();
+			sadrzaj[i][1] = zanr.getOpis();
+			sadrzaj[i][2] = zanr.getOznaka();
+			
+		}
 		tableModel = new DefaultTableModel(sadrzaj, zaglavlja);
 		zanroviTabela = new JTable(tableModel);
 		
@@ -79,66 +80,64 @@ public class ZanrKnjigePrikaz extends JFrame{
 		
 		JScrollPane scrollPane = new JScrollPane(zanroviTabela);
 		add(scrollPane, BorderLayout.CENTER);
-		
+	
+	}
+	private void initActions() {
+		btnDelete.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int red = zanroviTabela.getSelectedRow();
+				if(red == -1) {
+					JOptionPane.showMessageDialog(null, "Morate odabrati red u tabeli.", "Greska", JOptionPane.WARNING_MESSAGE);
+				}else {
+					int id =Integer.parseInt(tableModel.getValueAt(red, 0).toString());
+					String naziv = tableModel.getValueAt(red, 1).toString();
+					
+					int izbor = JOptionPane.showConfirmDialog(null, 
+							"Da li ste sigurni da zelite da obrisete zanr?", 
+							naziv + " - Porvrda brisanja", JOptionPane.YES_NO_OPTION);
+					if(izbor == JOptionPane.YES_OPTION) {
+						Zanr z =biblioteka.getZanrovi().get(id);
+						z.setObrisan(true);
+						try {
+							biblioteka.sacuvajZanrove();;
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						tableModel.removeRow(red);
+						
+						
+					}
+				}
+			}
+		});
+		btnAdd.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ZanrDodavanje zanrDodavanje = new ZanrDodavanje(biblioteka);
+				zanrDodavanje.setVisible(true);
+				ZanrKnjigePrikaz.this.dispose();
+				ZanrKnjigePrikaz.this.setVisible(false);
+			}
+		});
+
+		btnEdit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int red = zanroviTabela.getSelectedRow();
+				if(red == -1) {
+					JOptionPane.showMessageDialog(null, "Morate odabrati red u tabeli.", "Greska", JOptionPane.WARNING_MESSAGE);
+				}else {
+					String id = tableModel.getValueAt(red, 0).toString();
+					Zanr zanr = biblioteka.pronadjiZanr(id);
+					ZanrDodavanje editZanr = new ZanrDodavanje(biblioteka, zanr);
+					editZanr.setVisible(true);
+					ZanrKnjigePrikaz.this.dispose();
+					ZanrKnjigePrikaz.this.setVisible(false);
+				}
+			}
+		});
 	}
 
-	private void initActions() {
-//		btnIzbrisi.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				int red = zanroviTabela.getSelectedRow();
-//				if(red == -1) {
-//					JOptionPane.showMessageDialog(null, "Morate odabrati red u tabeli.","Greska",JOptionPane.WARNING_MESSAGE);
-//				}
-//				else {
-//					int id = Integer.parseInt(tableModel.getValueAt(red, 0).toString());
-//					String naziv = tableModel.getValueAt(red, 1).toString();
-//					
-//					int izbor = JOptionPane.showConfirmDialog(null, "Da li ste sigurni da zelite da obrisete clana?",naziv + "- Potvrda brisanja",JOptionPane.YES_NO_OPTION);
-//					if(izbor == JOptionPane.YES_NO_OPTION) {
-//						ZanrKnjige c = biblioteka.getZanrovi().get(id);
-//						c.setObrisan(true);
-//						System.out.println(biblioteka.getZanrovi().toString());
-//						try {
-//							biblioteka.sacuvajZanrKnjige();
-//						}
-//						catch(IOException e1) {
-//							e1.printStackTrace();
-//						}
-//						tableModel.removeRow(red);
-//					}
-//				}
-//			}
-//		});
-//		
-//		btnDodaj.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				ZanrDodavanje da = new ZanrDodavanje(biblioteka);
-//				da.setVisible(true);
-//				ZanrKnjigePrikaz.this.dispose();
-//				ZanrKnjigePrikaz.this.setVisible(false);
-//			}
-//		});
-//		btnIzmeni.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				int row = zanroviTabela.getSelectedRow();
-//				if(row == -1) {
-//					JOptionPane.showMessageDialog(null, "Morate da izaberete red koji zelite da promenite","Greska",JOptionPane.WARNING_MESSAGE);
-//				}
-//				else {
-//					String id = tableModel.getValueAt(row, 0).toString();
-//					ZanrKnjige zanr = biblioteka.pronadjiZanr(id);
-//					System.out.println(zanr);
-//					ZanrIzmena edit = new ZanrIzmena(biblioteka,zanr);
-//					edit.setVisible(true);
-//				}
-//				
-//			}
-//		});
-	}
 }

@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -18,133 +19,128 @@ import javax.swing.table.DefaultTableModel;
 
 import biblioteka.Biblioteka;
 import ljudi.Bibliotekar;
-import ljudi.Zaposleni;
-//import swingDodavanje.BibliotekarDodavanje;
-//import swingIzmena.BibliotekarIzmena;
-import javax.swing.SwingConstants;
+import swingDodavanje.BibliotekarDodavanje;
 
-public class BibliotekarPrikaz extends JFrame{
+
+public class BibliotekarPrikaz extends JFrame {
 	private JToolBar mainToolbar = new JToolBar();
-	private Zaposleni zaposleni;
-	
-	private DefaultTableModel tableModel;
-	private JTable bibiliotekariTabela;
-	
-	private Biblioteka biblioteka;
-	private Bibliotekar bibliotekar;
-	private final JButton btnDodaj = new JButton("Dodaj Bibliotekara");
-	private final JButton btnIzmeni = new JButton("Izmeni Bibliotekara");
-	private final JButton btnIzbrisi = new JButton("Izbrisi Bibliotekara");
+	private JButton btnAdd = new JButton("Dodaj");
+	private JButton btnEdit = new JButton("Izmeni");
+	private JButton btnDelete = new JButton("Obrisi");
 	ImageIcon ikonica = new ImageIcon("src/slike/knjiga.png");
-
-	public BibliotekarPrikaz (Biblioteka biblioteka,Zaposleni zaposleni) {
+	private DefaultTableModel tableModel;
+	private JTable BibliotekariTabela;
+	 
+	private Biblioteka biblioteka;
+	
+	public BibliotekarPrikaz(Biblioteka biblioteka) {
 		this.biblioteka = biblioteka;
-		this.zaposleni = zaposleni;
 		setTitle("Bibliotekari");
-		setSize(600, 400);
-		setIconImage(ikonica.getImage());
+		setSize(600, 300);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
-		initGUI();
-		initActions();
-	}
-
-	private void initGUI() {
 		getContentPane().add(mainToolbar, BorderLayout.SOUTH);		
 		mainToolbar.setBackground(Color.LIGHT_GRAY);
-		btnDodaj.setBackground(Color.LIGHT_GRAY);
-		btnIzmeni.setBackground(Color.LIGHT_GRAY);
-		btnIzbrisi.setBackground(Color.LIGHT_GRAY);
-		mainToolbar.add(btnDodaj);
-		mainToolbar.add(btnIzmeni);
-		mainToolbar.add(btnIzbrisi);
-		
-		String[] zaglavlja = new String[] {"JMBG", "Adresa", "ID", "Ime", "Prezime", "Pol", "Lozinka", "KorisnicoIme","Plata"};
-		Object[][] sadrzaj = new Object[biblioteka.sviNeobrisaniBibliotekari().size()][zaglavlja.length];
-		
-		for(int i=0; i<biblioteka.sviNeobrisaniBibliotekari().size(); i++) {
-			Bibliotekar clan = biblioteka.sviNeobrisaniBibliotekari().get(i);
-//			Knjiga knjiga = biblioteka.pronadjiDisk(clan);
-			sadrzaj[i][0] = clan.getId();
-			sadrzaj[i][1] = clan.getIme();
-			sadrzaj[i][2] = clan.getPrezime();
-			sadrzaj[i][3] = clan.getJmbg();
-			sadrzaj[i][4] = clan.getAdresa();
-			sadrzaj[i][5] = clan.getPol();
-			sadrzaj[i][6] = clan.getLozinka();
-			sadrzaj[i][7] = clan.getKorisnickoIme();
-			sadrzaj[i][8] = clan.getPlata();
-//			sadrzaj[i][2] = disk == null ? "--" : disk.getNaziv();
+		btnAdd.setBackground(Color.LIGHT_GRAY);
+		btnEdit.setBackground(Color.LIGHT_GRAY);
+		btnDelete.setBackground(Color.LIGHT_GRAY);
+		mainToolbar.add(btnAdd);
+		mainToolbar.add(btnEdit);
+		mainToolbar.add(btnDelete);
+		setIconImage(ikonica.getImage());
+		initGUI();
+		initActions();
 		}
+	private void initGUI() {
+		mainToolbar.add(btnAdd);
+		mainToolbar.add(btnEdit);		 
+		mainToolbar.add(btnDelete);		
+		add(mainToolbar, BorderLayout.SOUTH);
 		
+		ArrayList<Bibliotekar>neobrisaniBibliotekari=biblioteka.sviNeobrisaniBibliotekari();
+		String[] zaglavlja = new String[] {"ID", "Korisnicko ime", "lozinka", "Pol"};
+		Object[][] sadrzaj = new Object[neobrisaniBibliotekari.size()][zaglavlja.length];
+		for(int i=0; i<neobrisaniBibliotekari.size(); i++) {
+			
+			Bibliotekar b = neobrisaniBibliotekari.get(i);		
+			sadrzaj[i][0] = b.getId();
+			sadrzaj[i][1] = b.getKorisnickoIme();
+			sadrzaj[i][2] = b.getLozinka();
+			sadrzaj[i][3] = b.getPol();
+
+		}
 		tableModel = new DefaultTableModel(sadrzaj, zaglavlja);
-		bibiliotekariTabela = new JTable(tableModel);
+		BibliotekariTabela = new JTable(tableModel);
 		
-		bibiliotekariTabela.setRowSelectionAllowed(true);
-		bibiliotekariTabela.setColumnSelectionAllowed(false);
-		bibiliotekariTabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		bibiliotekariTabela.setDefaultEditor(Object.class, null);
-		bibiliotekariTabela.getTableHeader().setReorderingAllowed(false);
+		BibliotekariTabela.setRowSelectionAllowed(true);
+		BibliotekariTabela.setColumnSelectionAllowed(false);
+		BibliotekariTabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		BibliotekariTabela.setDefaultEditor(Object.class, null);
+		BibliotekariTabela.getTableHeader().setReorderingAllowed(false);
 		
-		JScrollPane scrollPane = new JScrollPane(bibiliotekariTabela);
-		getContentPane().add(scrollPane, BorderLayout.CENTER);
+		JScrollPane scrollPane = new JScrollPane(BibliotekariTabela);
+		add(scrollPane, BorderLayout.CENTER);
+	
+	}
+	private void initActions() {
+		btnDelete.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int red = BibliotekariTabela.getSelectedRow();
+				if(red == -1) {
+					JOptionPane.showMessageDialog(null, "Morate odabrati red u tabeli.", "Greska", JOptionPane.WARNING_MESSAGE);
+				}else {
+					int id =Integer.parseInt(tableModel.getValueAt(red, 0).toString());
+					String naziv = tableModel.getValueAt(red, 1).toString();
+					
+					int izbor = JOptionPane.showConfirmDialog(null, 
+							"Da li ste sigurni da zelite da obrisete bibliotekara?", 
+							naziv + " - Porvrda brisanja", JOptionPane.YES_NO_OPTION);
+					if(izbor == JOptionPane.YES_OPTION) {
+						Bibliotekar b =biblioteka.getBibliotekari().get(id);
+						b.setObrisan(true);
+						System.out.println(biblioteka.getBibliotekari().toString());
+						try {
+							biblioteka.sacuvajBibliotekare();
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+						tableModel.removeRow(red);
+						
+						
+					}
+				}
+			}
+		});
+		btnAdd.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				BibliotekarDodavanje bibliotekarDodavanje = new BibliotekarDodavanje(biblioteka);
+				bibliotekarDodavanje.setVisible(true);
+				BibliotekarPrikaz.this.dispose();
+				BibliotekarPrikaz.this.setVisible(false);
+			}
+		});
+//		
+		btnEdit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int red = BibliotekariTabela.getSelectedRow();
+				if(red == -1) {
+					JOptionPane.showMessageDialog(null, "Morate odabrati red u tabeli.", "Greska", JOptionPane.WARNING_MESSAGE);
+				}else {
+					String id = tableModel.getValueAt(red, 0).toString();
+					Bibliotekar bibliotekar = biblioteka.pronadjiBibliotekara(id);
+					BibliotekarDodavanje editBibliotekar = new BibliotekarDodavanje(biblioteka, bibliotekar);
+					editBibliotekar.setVisible(true);
+					BibliotekarPrikaz.this.dispose();
+					BibliotekarPrikaz.this.setVisible(false);
+				}
+			}
+		});
 	}
 
-	private void initActions() {
-//		btnIzbrisi.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				int red = bibiliotekariTabela.getSelectedRow();
-//				if(red == -1) {
-//					JOptionPane.showMessageDialog(null, "Morate odabrati red u tabeli.","Greska",JOptionPane.WARNING_MESSAGE);
-//				}
-//				else {
-//					int id = Integer.parseInt(tableModel.getValueAt(red, 0).toString());
-//					String naziv = tableModel.getValueAt(red, 1).toString();
-//					
-//					int izbor = JOptionPane.showConfirmDialog(null, "Da li ste sigurni da zelite da obrisete clana?",naziv + "- Potvrda brisanja",JOptionPane.YES_NO_OPTION);
-//					if(izbor == JOptionPane.YES_NO_OPTION) {
-//						Bibliotekar c = biblioteka.getBibliotekar().get(id);
-//						c.setObrisan(true);
-//						System.out.println(biblioteka.getBibliotekar().toString());
-//						try {
-//							biblioteka.sacuvajBibliotekre();
-//						}
-//						catch(IOException e1) {
-//							e1.printStackTrace();
-//						}
-//						tableModel.removeRow(red);
-//					}
-//				}
-//			}
-//		});
-//		
-//		btnDodaj.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				BibliotekarDodavanje da = new BibliotekarDodavanje(biblioteka, bibliotekar);
-//				da.setVisible(true);
-//				BibliotekarPrikaz.this.dispose();
-//				BibliotekarPrikaz.this.setVisible(false);
-//			}
-//		});
-//		
-//		btnIzmeni.addActionListener(new ActionListener() {
-//			
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				int row = bibiliotekariTabela.getSelectedRow();
-//				if(row == -1) {
-//					JOptionPane.showMessageDialog(null, "Morate da izaberete red koji zelite da proemnite","Greska",JOptionPane.WARNING_MESSAGE);
-//				}
-//				String id = tableModel.getValueAt(row, 0).toString();
-//				Bibliotekar bibliotekar = biblioteka.pronadjiBibliotekara(id);
-//				System.out.println(bibliotekar);
-//				BibliotekarIzmena edit = new BibliotekarIzmena(biblioteka,bibliotekar);
-//				edit.setVisible(true);
-//			}
-//		});
-	}
 }
+
+

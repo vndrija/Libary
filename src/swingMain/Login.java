@@ -1,6 +1,9 @@
 package swingMain;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -11,17 +14,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
-import biblioteka.Biblioteka;
-import swingMain.Login;
-import net.miginfocom.swing.MigLayout;
-import ljudi.Administrator;
-import ljudi.Zaposleni;
-
 import javax.swing.JTextField;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.Toolkit;
+
+import biblioteka.Biblioteka;
+import ljudi.Admin;
+import ljudi.Zaposleni;
+import net.miginfocom.swing.MigLayout;
 
 public class Login extends JFrame {
 
@@ -38,18 +36,6 @@ public class Login extends JFrame {
 	
 	ImageIcon ikonica = new ImageIcon("src/slike/ikonicaKnjige.png");
 	
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					Login frame = new Login();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 	public Login(Biblioteka biblioteka) {
 		this.biblioteka = biblioteka;
 		setIconImage(ikonica.getImage());
@@ -85,8 +71,8 @@ public class Login extends JFrame {
 		add(btnOk, "split 2");
 		add(btnCancel);
 		
-		korisnickoImePolje.setText("korisnickoIme");
-		lozinkaPolje.setText("lozinka2");
+		korisnickoImePolje.setText("akorisnicko");
+		lozinkaPolje.setText("alozinka");
 		getRootPane().setDefaultButton(btnOk);
 	}
 	
@@ -114,7 +100,7 @@ public class Login extends JFrame {
 					}else {
 						Login.this.dispose();
 						Login.this.setVisible(false);
-						boolean isAdmin = prijavljeni instanceof Administrator;
+						boolean isAdmin = prijavljeni instanceof Admin;
 						MainWindow mw = new MainWindow(biblioteka, prijavljeni,isAdmin);
 						mw.setVisible(true);
 						}
@@ -123,3 +109,4 @@ public class Login extends JFrame {
 		});
 	}
 }
+

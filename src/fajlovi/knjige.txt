@@ -1,2 +1,2 @@
-Naslov|OrgNaslov|Pisac|1920|Opis|1|1|Engleski|false
-Naslov|OrgNaslov|Pisac|1920|Opis|1|1|Engleski|false
+0|KNaziv1|Original1|Pisac1|1980|Opis1|SRPSKI|2|false
+1|KNaziv2|Original2|Pisac2|1920|Opis2|ENGLESKI|1|false

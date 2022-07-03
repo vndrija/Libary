@@ -1,0 +1,6 @@
+0|ZOpis1|352|false
+1|ZOpis2|652|false
+2|ZOpis3|143|false
+3|ZOpis4|251|false
+4|ZOpis5|155|true
+5|ZOpis6|523|false
