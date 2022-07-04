@@ -49,7 +49,6 @@ public class MainWindow extends JFrame{
 	private Zaposleni prijavljeniKorisnik;
 	private boolean isAdmin;
 	private final JTextPane txtpnSada = new JTextPane();
-	ImageIcon ikonica = new ImageIcon("src/slike/knjiga.png");
 	private final JLabel label = new JLabel("");
 	
 	public MainWindow(Biblioteka biblioteka, Zaposleni prijavljeniKorisnik,boolean isAdmin) {
@@ -68,7 +67,6 @@ public class MainWindow extends JFrame{
 	}
 	
 	private void initMenu() {
-		setIconImage(ikonica.getImage());
 		mainMenu.setForeground(Color.WHITE);
 		mainMenu.setBackground(Color.GRAY);
 		mainMenu.setAlignmentX(Component.RIGHT_ALIGNMENT);

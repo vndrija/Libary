@@ -27,7 +27,6 @@ public class IznajmljivanjePrikaz extends JFrame{
 	private JButton btnAdd = new JButton("Dodaj");
 	private JButton btnEdit = new JButton("Izmeni");
 	private JButton btnDelete = new JButton("Obrisi");
-	ImageIcon ikonica = new ImageIcon("src/slike/knjiga.png");
 	
 	private DefaultTableModel tableModel;
 	private JTable iznajmljivanjeTabela;
@@ -50,17 +49,16 @@ public class IznajmljivanjePrikaz extends JFrame{
 		mainToolbar.add(btnAdd);
 		mainToolbar.add(btnEdit);
 		mainToolbar.add(btnDelete);
-		setIconImage(ikonica.getImage());
 		initGUI();
-		initActions();
+		initActions(); 
 		}
 	private void initGUI() {
-		mainToolbar.add(btnAdd);
-		mainToolbar.add(btnEdit);		 
-		mainToolbar.add(btnDelete);		
+//		mainToolbar.add(btnAdd);
+//		mainToolbar.add(btnEdit);		 
+//		mainToolbar.add(btnDelete);		
 		add(mainToolbar, BorderLayout.SOUTH);
 		
-		ArrayList<Iznajmljivanje>neobrisanaIznajmljivanja=biblioteka.svaNeobrisanaIznajmljivanja();
+		ArrayList<Iznajmljivanje> neobrisanaIznajmljivanja =biblioteka.svaNeobrisanaIznajmljivanja();
 		String[] zaglavlja = new String[] {"Id","Primerak", "Clan", "Iznajmljena od", "Iznajmljena do"};
 		Object[][] sadrzaj = new Object[neobrisanaIznajmljivanja.size()][zaglavlja.length];
 		for(int i=0; i<neobrisanaIznajmljivanja.size(); i++) {
@@ -99,7 +97,7 @@ public class IznajmljivanjePrikaz extends JFrame{
 					
 					int izbor = JOptionPane.showConfirmDialog(null, 
 							"Da li ste sigurni da zelite da obrisete clana?", 
-							naziv + " - Porvrda brisanja", JOptionPane.YES_NO_OPTION);
+							naziv + " - Potvrda brisanja", JOptionPane.YES_NO_OPTION);
 					if(izbor == JOptionPane.YES_OPTION) {
 						Iznajmljivanje i=biblioteka.getIznajmljivanja().get(id);
 						i.setObrisan(true);

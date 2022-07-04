@@ -702,6 +702,24 @@ public class Biblioteka {
 			}
 		citaj.close();	
 	}
+	
+	public void proveriAktivnost() throws IOException{
+		LocalDate trenutniDatum=LocalDate.now();
+		for(Clan clan:clanovi) {
+			LocalDate datum = clan.getDatPoslednjeUplate();
+			String brMeseci=clan.getBrMeseci();
+			int brojMeseci=Integer.parseInt(brMeseci);
+			LocalDate noviDatum=datum.plusMonths(brojMeseci);
+			boolean isAfter = trenutniDatum.isAfter(noviDatum);
+			if(isAfter==true) {
+				clan.setAktivnost(false);
+			}
+			else {
+				clan.setAktivnost(true);	
+			}
+			;
+		}
+	}
 
 	public void citajClanove(String fajlClanovi)throws IOException{
 		File claoviFile = new File(fajlClanovi);
@@ -873,24 +891,6 @@ public class Biblioteka {
 
 
 
-
-public void proveriAktivnost() throws IOException{
-	LocalDate trenutniDatum=LocalDate.now();
-	for(Clan clan:clanovi) {
-		LocalDate datum = clan.getDatPoslednjeUplate();
-		String brMeseci=clan.getBrMeseci();
-		int brojMeseci=Integer.parseInt(brMeseci);
-		LocalDate noviDatum=datum.plusMonths(brojMeseci);
-		boolean isAfter = trenutniDatum.isAfter(noviDatum);
-		if(isAfter==true) {
-			clan.setAktivnost(false);
-		}
-		else {
-			clan.setAktivnost(true);	
-		}
-		;
-	}
-}
 }
 
 	

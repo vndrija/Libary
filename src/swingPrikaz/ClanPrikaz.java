@@ -124,7 +124,7 @@ public class ClanPrikaz extends JFrame {
 		btnAdd.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ClanDodavanje clanDodavanje = new ClanDodavanje(biblioteka);
+				ClanDodavanje clanDodavanje = new ClanDodavanje(biblioteka); /*zovem klasu zovem konstruktor njemu dodelimo biblioteku*/
 				clanDodavanje.setVisible(true);
 				ClanPrikaz.this.dispose();
 				ClanPrikaz.this.setVisible(false);
@@ -140,7 +140,7 @@ public class ClanPrikaz extends JFrame {
 				}else {
 					String id = tableModel.getValueAt(red, 0).toString();
 					Clan clan = biblioteka.pronadjiClana(id);
-					ClanDodavanje editClanovi = new ClanDodavanje(biblioteka,clan );
+					ClanDodavanje editClanovi = new ClanDodavanje(biblioteka,clan ); /*pozivam konstruktor za editovanje*/
 					editClanovi.setVisible(true);
 					ClanPrikaz.this.dispose();
 					ClanPrikaz.this.setVisible(false);

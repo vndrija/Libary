@@ -42,7 +42,7 @@ public class IznajmljivanjeDodavanje  extends JFrame{
 	private Zaposleni prijavljeni;
 	
 	
-	public IznajmljivanjeDodavanje(Biblioteka biblioteka,Zaposleni prijavljeni) {
+	public IznajmljivanjeDodavanje(Biblioteka biblioteka,Zaposleni prijavljeni) { /*konstruktor za dodavanje*/
 		this.biblioteka=biblioteka;
 		this.prijavljeni=prijavljeni;
 		setSize(1000,1000);
@@ -53,7 +53,7 @@ public class IznajmljivanjeDodavanje  extends JFrame{
 		initActions();
 		pack();
 	}
-	public IznajmljivanjeDodavanje(Biblioteka biblioteka,Zaposleni prijavljeni, Iznajmljivanje iznajmljivanje) {
+	public IznajmljivanjeDodavanje(Biblioteka biblioteka,Zaposleni prijavljeni, Iznajmljivanje iznajmljivanje) { /*konstruktor za iznajmljivanje*/
 		this.biblioteka=biblioteka;	
 		this.prijavljeni=prijavljeni;
 		this.iznajmljivanje=iznajmljivanje;
@@ -71,9 +71,9 @@ public class IznajmljivanjeDodavanje  extends JFrame{
 		for(Clan clan:clanovi) {
 			cbIznajmio.addItem(clan.getBrojClanskeKarte());
 		}
-		ArrayList<Primerak> primerci=biblioteka.sviNeobrisaniPrimerci();
-		for(Primerak primerak:primerci) {
-			cbPrimerak.addItem(primerak.getId());
+		ArrayList<Primerak> primerci=biblioteka.sviNeobrisaniPrimerci(); /*aray lista primeraka u njoj se sadrze svi neobrisani primerci*/
+		for(Primerak primerak:primerci) { /*prolazim okrosz nasu array listu svih neobrisanih primeraka*/
+			cbPrimerak.addItem(primerak.getId()); /*u combobox za primerke dodamo id iz liste neobrisanih */
 		}
 		txtIzdao.setText(prijavljeni.getKorisnickoIme());
 	
@@ -94,7 +94,6 @@ public class IznajmljivanjeDodavanje  extends JFrame{
 		add(btnOk);
 		add(btnCancel);
 		
-		txtIzdao.setText(prijavljeni.getKorisnickoIme());
 		if(iznajmljivanje!=null) {
 			
 			
@@ -115,9 +114,8 @@ public class IznajmljivanjeDodavanje  extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 				
 				int primerakId=cbPrimerak.getSelectedIndex();
-
-				
 				Primerak primerak = biblioteka.sviNeobrisaniPrimerci().get(primerakId);
+				
 				int iznajmioId=cbIznajmio.getSelectedIndex();
 				Clan clan=biblioteka.sviNeobrisaniClanovi().get(iznajmioId);
 				DateTimeFormatter dateFormatter= DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -131,7 +129,7 @@ public class IznajmljivanjeDodavanje  extends JFrame{
 				}
 				else {
 					if(iznajmljivanje==null) {
-						String id= Integer.toString(biblioteka.getIznajmljivanja().size());	
+						String id= Integer.toString(biblioteka.getIznajmljivanja().size());	/*validacija za id*/
 						Iznajmljivanje novoIznajmljivanje=new Iznajmljivanje(id,primerak,clan,datumIznajmljivanja,datumVracanja,prijavljeni,false);
 						biblioteka.getIznajmljivanja().add(novoIznajmljivanje);	
 						}

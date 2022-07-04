@@ -27,8 +27,6 @@ public class ClanDodavanje extends JFrame {
 	private Pol[] pol=Pol.values();
 	private JLabel lblPol=new JLabel("Pol: ");
 	private JComboBox cbPol=new JComboBox(pol);
-//	private JLabel lblBrojClanskeKarte=new JLabel("Broj clanske karte: ");
-//	private JTextField txtBrojClanskeKarte=new JTextField(20);
 	private JLabel lblDatumPoslednjeUplate=new JLabel("Datum poslednje uplate: ");
 	private JTextField txtDatumPoslednjeUplate=new JTextField(20);
 	private JLabel lblBrMeseci=new JLabel("Broj meseci: ");
@@ -74,7 +72,7 @@ public class ClanDodavanje extends JFrame {
 		pack();
 	}
 	public void initGUI() {
-		ArrayList<TipClanarine> tipovi=biblioteka.sviNeobrisaniTipovi();
+		ArrayList<TipClanarine> tipovi=biblioteka.sviNeobrisaniTipovi(); /*prolazak kroz listu tipova i postavljanje svih opis u combobox iz liste*/
 		for(TipClanarine tipClanarine: tipovi) {
 			cbTipClanarine.addItem(tipClanarine.getOpis());
 		}
@@ -82,8 +80,6 @@ public class ClanDodavanje extends JFrame {
 		MigLayout mig = new MigLayout("wrap 2", "[][]", "[]10[][]10[]");
 		setLayout(mig);
 		
-//		add(lblBrojClanskeKarte);
-//		add(txtBrojClanskeKarte);
 		add(lblDatumPoslednjeUplate);
 		add(txtDatumPoslednjeUplate);
 		add(lblBrMeseci);
@@ -132,7 +128,6 @@ public class ClanDodavanje extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-//				String brojClanskeKarte=txtBrojClanskeKarte.getText().trim();
 				DateTimeFormatter dateFormatter= DateTimeFormatter.ofPattern("yyyy-MM-dd");
 				String datumPoslednjeUplateString=txtDatumPoslednjeUplate.getText().trim();
 				LocalDate datumPoslednjeUplate=LocalDate.parse(datumPoslednjeUplateString,dateFormatter);
