@@ -57,8 +57,8 @@ public class BibliotekaIzmena extends JFrame {
 		add(txtRadnoVremeOd);
 		add(lblRadnoVremeDo);
 		add(txtRadnoVremeDo);
-		add(btnCancel);
 		add(btnOk);
+		add(btnCancel);
 		
 		txtNaziv.setText(biblioteka.getNaziv());
 		txtAdresa.setText(biblioteka.getAdresa());
