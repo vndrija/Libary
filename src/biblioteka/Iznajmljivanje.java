@@ -6,7 +6,7 @@ import ljudi.Clan;
 import ljudi.Zaposleni;
 
 public class Iznajmljivanje {
-	private String id;
+	private String id;    /*ATRIBUTI*/  /*STRING=REC*/ /*INT= CELI BROJEVI*/ /*LOCAL DATE=DATUMI*/ /*BOOLEAN = TRUE OR FALES*/ /*DOUBLE = DECIMALNI*/ 
 	private LocalDate datumIznajmljivanja;
 	private LocalDate datumVracanja;
 	private Knjiga knjiga;
@@ -16,9 +16,9 @@ public class Iznajmljivanje {
 	
 	private boolean obrisan;
 	
-	public Iznajmljivanje() {
+	public Iznajmljivanje() { /*PRAZAN KONSTRUKTOR*/ 
 	}
-	public Iznajmljivanje(String id,Primerak primerak,Clan clan,LocalDate datumIznajmljivanja, LocalDate datumVracanja,
+	public Iznajmljivanje(String id,Primerak primerak,Clan clan,LocalDate datumIznajmljivanja, LocalDate datumVracanja, /*PUN KONSTRUKTOR*/ 
 			  Zaposleni zaposleni,boolean obrisan) {
 		super();
 		this.id=id;
@@ -32,10 +32,10 @@ public class Iznajmljivanje {
 	
 
 
-	public String getId() {
+	public String getId() { /*GETER*/ 
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(String id) { /*SETER*/ 
 		this.id = id;
 	}
 	public LocalDate getDatumIznajmljivanja() {
@@ -81,7 +81,7 @@ public class Iznajmljivanje {
 		this.obrisan = obrisan;
 	}
 	@Override
-	public String toString() {
+	public String toString() { /*METODA TOO STRING*/ 
 		return "\nIznajmljena od: " + datumIznajmljivanja
 			 + "\nIznajmljena do: " + datumVracanja
 			+ "\nPrimerak: " + primerak

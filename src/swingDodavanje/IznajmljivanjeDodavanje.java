@@ -34,11 +34,6 @@ public class IznajmljivanjeDodavanje  extends JFrame{
 	private JLabel lblIznajmio=new JLabel("Iznajmio: ");
 	private JComboBox cbIznajmio=new JComboBox();
 	private JLabel lblPrimerak=new JLabel("Primerak: ");
-	
-	DefaultListModel model = new DefaultListModel();
-	private JList listPrimerak = new JList(model);
-	ArrayList<Primerak> primerakA = new ArrayList<Primerak>();
-	
 	private JComboBox cbPrimerak=new JComboBox();
 	private JButton btnOk = new JButton("OK");
 	private JButton btnCancel = new JButton("Cancel");
@@ -76,13 +71,9 @@ public class IznajmljivanjeDodavanje  extends JFrame{
 		for(Clan clan:clanovi) {
 			cbIznajmio.addItem(clan.getBrojClanskeKarte());
 		}
-//		ArrayList<Primerak> primerci=biblioteka.sviNeobrisaniPrimerci();
-//		for(Primerak primerak:primerci) {
-//			cbPrimerak.addItem(primerak.getId());
-//		}
 		ArrayList<Primerak> primerci=biblioteka.sviNeobrisaniPrimerci();
 		for(Primerak primerak:primerci) {
-			model.addElement(primerak.getId());
+			cbPrimerak.addItem(primerak.getId());
 		}
 		txtIzdao.setText(prijavljeni.getKorisnickoIme());
 	
@@ -91,8 +82,7 @@ public class IznajmljivanjeDodavanje  extends JFrame{
 		
 		
 		add(lblPrimerak);
-		add(listPrimerak);
-		//add(cbPrimerak);
+		add(cbPrimerak);
 		add(lblIzdao);
 		add(txtIzdao);
 		add(lblIznajmio);
@@ -105,11 +95,10 @@ public class IznajmljivanjeDodavanje  extends JFrame{
 		add(btnCancel);
 		
 		txtIzdao.setText(prijavljeni.getKorisnickoIme());
-		//ArrayList<Primerak> primerak = new ArrayList<Primerak>();
 		if(iznajmljivanje!=null) {
 			
 			
-			//cbPrimerak.setSelectedItem(iznajmljivanje.getPrimerak().getId());
+			cbPrimerak.setSelectedItem(iznajmljivanje.getPrimerak().getId());
 			cbIznajmio.setSelectedItem(iznajmljivanje.getClan().getBrojClanskeKarte());
 			String datumIznajmljivanja =iznajmljivanje.getDatumIznajmljivanja().toString();
 			txtDatumIznajmljivanja.setText(datumIznajmljivanja);
@@ -120,28 +109,15 @@ public class IznajmljivanjeDodavanje  extends JFrame{
 		txtIzdao.setEnabled(false);
 	}
 	public void initActions() {
-		btnCancel.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				IznajmljivanjeDodavanje.this.dispose();
-				IznajmljivanjeDodavanje.this.setVisible(false);
-			}
-		});
+
 		btnOk.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				//int primerakId=cbPrimerak.getSelectedIndex();
-				int[] indeks = listPrimerak.getSelectedIndices();
-				//System.out.println(indeks);
-				//int counter = 0;
-				for (int i:indeks) {
-					primerakA.add(biblioteka.sviNeobrisaniPrimerci().get(i));
-					//counter += 1;
-				}
-				System.out.println(primerakA);
-				Primerak primerak = primerakA.get(0);
+				int primerakId=cbPrimerak.getSelectedIndex();
+
 				
+				Primerak primerak = biblioteka.sviNeobrisaniPrimerci().get(primerakId);
 				int iznajmioId=cbIznajmio.getSelectedIndex();
 				Clan clan=biblioteka.sviNeobrisaniClanovi().get(iznajmioId);
 				DateTimeFormatter dateFormatter= DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -172,6 +148,13 @@ public class IznajmljivanjeDodavanje  extends JFrame{
 						e1.printStackTrace();
 					}
 				}
+			}
+		});
+		btnCancel.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				IznajmljivanjeDodavanje.this.dispose();
+				IznajmljivanjeDodavanje.this.setVisible(false);
 			}
 		});
 	}}

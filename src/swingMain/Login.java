@@ -34,11 +34,9 @@ public class Login extends JFrame {
 	protected JButton btnCancel = new JButton("Otkaži");
 	protected Biblioteka biblioteka;
 	
-	ImageIcon ikonica = new ImageIcon("src/slike/ikonicaKnjige.png");
 	
 	public Login(Biblioteka biblioteka) {
 		this.biblioteka = biblioteka;
-		setIconImage(ikonica.getImage());
 		setTitle("Biblioteka Prijava");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
