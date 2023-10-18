@@ -1,2 +1,2 @@
-# SR53-2021-UOP-projekat
-Promena
+# Libary
+Project I did for my "Intro Into Object-Oriented Programming" class for my college (second semestar)
